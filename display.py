@@ -4,6 +4,9 @@ import os
 import arrow
 from papirus import PapirusTextPos
 
+bold_font = '/usr/share/fonts/truetype/freefont/FreeSansBold.ttf'
+standard_font = '/usr/share/fonts/truetype/freefont/FreeSans.ttf'
+
 outdoor = requests.get(os.environ['REST_ENDPOINT_OUTDOOR'])
 indoor = requests.get(os.environ['REST_ENDPOINT_INDOOR'])
 text = PapirusTextPos(False) # Don't update the screen immediately
@@ -16,14 +19,14 @@ indoor_humidity_formatted = str(indoor.json()['humidity']) + '%'
 
 timestamp = arrow.get(int(outdoor.json()['timestamp'])/1000).to(os.environ['TIMEZONE']).format('HH:mm')
 
-text.AddText(timestamp, 164, -2, size=12, fontPath='/usr/share/fonts/truetype/freefont/FreeSansBold.ttf')
+text.AddText(timestamp, 160, -2, size=16, fontPath=bold_font)
 
-text.AddText('Outdoor', 0, -2, size=12, fontPath='/usr/share/fonts/truetype/freefont/FreeSansBold.ttf')
-text.AddText(outdoor_temperature_formatted, 0, 3, size=48, fontPath='/usr/share/fonts/truetype/freefont/FreeSans.ttf')
-text.AddText(outdoor_humidity_formatted, 140, 19, size=28, fontPath='/usr/share/fonts/truetype/freefont/FreeSans.ttf')
+text.AddText('Outdoor', 0, -2, size=12, fontPath=bold_font)
+text.AddText(outdoor_temperature_formatted, 0, 3, size=48, fontPath=standard_font)
+text.AddText(outdoor_humidity_formatted, 130, 14, size=36, fontPath=standard_font)
 
-text.AddText('Indoor', 0, 47, size=12, fontPath='/usr/share/fonts/truetype/freefont/FreeSansBold.ttf')
-text.AddText(indoor_temperature_formatted, 0, 52, size=48, fontPath='/usr/share/fonts/truetype/freefont/FreeSans.ttf')
-text.AddText(indoor_humidity_formatted, 140, 70, size=28, fontPath='/usr/share/fonts/truetype/freefont/FreeSans.ttf')
+text.AddText('Indoor', 0, 47, size=12, fontPath=bold_font)
+text.AddText(indoor_temperature_formatted, 0, 52, size=48, fontPath=standard_font)
+text.AddText(indoor_humidity_formatted, 130, 62, size=36, fontPath=standard_font)
 
 text.WriteAll()
