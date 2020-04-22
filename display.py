@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import requests
 import os
+import sys
 import arrow
 from papirus import PapirusTextPos
 
@@ -9,7 +10,15 @@ standard_font = '/usr/share/fonts/truetype/freefont/FreeSans.ttf'
 
 outdoor = requests.get(os.environ['REST_ENDPOINT_OUTDOOR'])
 indoor = requests.get(os.environ['REST_ENDPOINT_INDOOR'])
-text = PapirusTextPos(False) # Don't update the screen immediately
+
+# Don't update the screen immediately
+text = PapirusTextPos(False)
+
+# If called as "display.py partial", only the changed portions of the screen will be updated.
+# It's recommended to update the screen with a full refresh every few minutes:
+# https://github.com/PiSupply/PaPiRus#full-and-partial-updates
+if sys.argv[1] == 'partial':
+    text.partialUpdates = True
 
 outdoor_temperature_formatted = outdoor.json()['temperature'] + '\u00B0'
 indoor_temperature_formatted = indoor.json()['temperature'] + '\u00B0'
